@@ -8,7 +8,7 @@
 
 ### How To OpenVPN  
 
-Add to you openvpn.conf:  
+Add to you server openvpn.conf:  
 ```
 client-cert-not-required
 username-as-common-name
@@ -17,9 +17,12 @@ setenv freeipa_group_required vpn_it;
 setenv freeipa_replica freeipa-replica.you_domain.com;
 setenv freeipa_admin ovpn-2fa-service;
 setenv freeipa_admin_password SUPERPASSWORD;
-setenv freeipa_verify_ssl True;
 ```
-
+  
+Add to you client openvpn.conf:  
+```
+static-challenge "Enter 2fa PIN" 1
+```
 ### How does it work:  
 
 1. Openvpn transmits `username`, `password`, `auth_control_file` through environment variables, where `password` is a string like `SCRV1"base64password:base64pin`, `auth_control_file` is a tmp file monitored by the ovpn daemon, we must write 1 to it in case of successful authorization, 0 in case of failure. It is also necessary that our script completes without errors  
@@ -32,4 +35,5 @@ setenv freeipa_verify_ssl True;
 
 ## OTHER:  
 The script writes logs to `/var/log/ovpn_2fa_auth_script.log`    
-This script was also tested with pfsense 2.7.2 
+This script was also tested with pfsense 2.7.2  
+Setenv via openvpn is used so that one script can be used by many openvpn servers at the same time, for example, checking different freepa groups for a user
