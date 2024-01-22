@@ -25,7 +25,7 @@ static-challenge "Enter 2fa PIN" 1
 ```
 ### How does it work:  
 
-1. Openvpn transmits `username`, `password`, `auth_control_file` through environment variables, where `password` is a string like `SCRV1"base64password:base64pin`, `auth_control_file` is a tmp file monitored by the ovpn daemon, we must write 1 to it in case of successful authorization, 0 in case of failure. It is also necessary that our script completes without errors  
+1. Openvpn transmits `username`, `password`, `auth_control_file` through environment variables, where `password` is a string like `SCRV1:base64password:base64pin`, `auth_control_file` is a tmp file monitored by the ovpn daemon, we must write 1 to it in case of successful authorization, 0 in case of failure. It is also necessary that our script completes without errors  
 2. Script decodes payload from ENV `password`  
 2. The script binds the user with the transferred credentials  
 3. The script checks if a user is in a specific group  
